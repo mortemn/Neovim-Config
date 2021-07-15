@@ -1,4 +1,3 @@
-
 " sets 
 
 set exrc
@@ -27,7 +26,20 @@ set completeopt=menuone,noinsert,noselect
 set cmdheight=2
 set updatetime=50
 set shortmess+=c
+set mouse=a
+
 source $HOME/.config/nvim/plug-config/coc.vim
+
+if has('termguicolors')
+  set termguicolors
+endif
+
+" Available values: `'default'`, `'atlantis'`, `'andromeda'`, `'shusia'`, `'maia'`, `'espresso'`
+" Default value: `'default'`
+let g:sonokai_style = 'shusia'
+let g:sonokai_enable_italic = 1
+let g:sonokai_disable_italic_comment = 1
+
 
 " Plugins
 
@@ -50,9 +62,16 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'Yggdroot/indentLine'
+Plug 'sainnhe/sonokai'
+Plug 'ashisha/image.vim'
+Plug 'terryma/vim-multiple-cursors'
+Plug 'tpope/vim-surround'
+Plug 'mattn/emmet-vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 Plug 'gruvbox-community/gruvbox'
 call plug#end()
@@ -61,11 +80,8 @@ if executable('rg')
     let g:rg_derive_root='true'
 endif
 
-let g:sierra_Sunset = 1
-colorscheme sierra 
+colorscheme sonokai 
 " colorscheme gruvbox
-set background=dark
-highlight Normal guibg=none
 
 " for detecting OS
 if !exists("g:os")
@@ -75,6 +91,21 @@ if !exists("g:os")
         let g:os = substitute(system('uname'), '\n', '', '')
     endif
 endif
+
+" This is the default option:
+"   - Preview window on the right with 50% width
+"   - CTRL-/ will toggle preview window.
+" - Note that this array is passed as arguments to fzf#vim#with_preview function.
+" - To learn more about preview window options, see `--preview-window` section of `man fzf`.
+let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+
+" Preview window on the upper side of the window with 40% height,
+" hidden by default, ctrl-/ to toggle
+let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
+
+" Empty value to disable preview window altogether
+let g:fzf_preview_window = []
+
 
 " available options:
 " * g:split_term_style
@@ -127,6 +158,7 @@ let mapleader = " "
 let g:netrw_browse_split=2
 let g:netrw_banner=0
 let g:netrw_winsize=25
+let g:split_term_style='horizontal'
 
 let g:ctrlp_use_caching=0
 
@@ -140,4 +172,3 @@ nnoremap <leader>ps :Rg<SPACE>
 nnoremap <leader>e :CocCommand explorer<CR>
 nnoremap <silent> <Leader>+ :vertical resize +5<CR>
 nnoremap <silent> <Leader>- :vertical resize -5<CR>
-
