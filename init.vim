@@ -28,7 +28,6 @@ set updatetime=50
 set shortmess+=c
 set mouse=a
 
-source $HOME/.config/nvim/plug-config/coc.vim
 
 if has('termguicolors')
   set termguicolors
@@ -36,9 +35,9 @@ endif
 
 " Available values: `'default'`, `'atlantis'`, `'andromeda'`, `'shusia'`, `'maia'`, `'espresso'`
 " Default value: `'default'`
-let g:sonokai_style = 'shusia'
-let g:sonokai_enable_italic = 1
-let g:sonokai_disable_italic_comment = 1
+" let g:sonokai_style = 'shusia'
+" let g:sonokai_enable_italic = 1
+" let g:sonokai_disable_italic_comment = 1
 
 
 " Plugins
@@ -46,6 +45,7 @@ let g:sonokai_disable_italic_comment = 1
 call plug#begin('~/.vim/plugged')
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/telescope.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'flazz/vim-colorschemes'
@@ -54,24 +54,19 @@ Plug 'sbdchd/neoformat'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-treesitter/playground'
 Plug 'tpope/vim-fugitive'
-Plug 'vim-airline/vim-airline'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'mbbill/undotree'
 Plug 'tomlion/vim-solidity'
 Plug 'Valloric/YouCompleteMe'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ryanoasis/vim-devicons'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'kyazdani42/nvim-web-devicons'
 Plug 'romgrk/barbar.nvim'
 Plug 'Yggdroot/indentLine'
 Plug 'sainnhe/sonokai'
-Plug 'ashisha/image.vim'
-Plug 'terryma/vim-multiple-cursors'
 Plug 'tpope/vim-surround'
-Plug 'mattn/emmet-vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ayu-theme/ayu-vim'
+Plug 'NLKNguyen/papercolor-theme'
+Plug 'glepnir/dashboard-nvim'
 
 Plug 'gruvbox-community/gruvbox'
 call plug#end()
@@ -80,7 +75,16 @@ if executable('rg')
     let g:rg_derive_root='true'
 endif
 
-colorscheme sonokai 
+let ayucolor="light"  " for light version of theme
+" let ayucolor="mirage" " for mirage version of theme
+" let ayucolor="dark"   " for dark version of theme
+" colorscheme ayu
+set background=light
+colorscheme PaperColor
+set t_Co=256
+hi Normal guibg=NONE ctermbg=NONE
+
+" colorscheme sonokai 
 " colorscheme gruvbox
 
 " for detecting OS
@@ -91,21 +95,6 @@ if !exists("g:os")
         let g:os = substitute(system('uname'), '\n', '', '')
     endif
 endif
-
-" This is the default option:
-"   - Preview window on the right with 50% width
-"   - CTRL-/ will toggle preview window.
-" - Note that this array is passed as arguments to fzf#vim#with_preview function.
-" - To learn more about preview window options, see `--preview-window` section of `man fzf`.
-let g:fzf_preview_window = ['right:50%', 'ctrl-/']
-
-" Preview window on the upper side of the window with 40% height,
-" hidden by default, ctrl-/ to toggle
-let g:fzf_preview_window = ['up:40%:hidden', 'ctrl-/']
-
-" Empty value to disable preview window altogether
-let g:fzf_preview_window = []
-
 
 " available options:
 " * g:split_term_style
@@ -144,8 +133,6 @@ augroup CppToolkit
 	autocmd FileType cpp nnoremap <leader>fr :!./a.out<CR>
 augroup END
 
-let g:airline_powerline_fonts = 1
-
 " add a custom command to resize the terminal window to your preference
 " (default is to split the screen equally)
 let g:split_term_resize_cmd = 'resize 6'
@@ -167,8 +154,27 @@ nnoremap <leader>j :wincmd j<CR>
 nnoremap <leader>k :wincmd k<CR>
 nnoremap <leader>l :wincmd l<CR>
 nnoremap <leader>u :UndotreeToggle<CR>
-nnoremap <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
-nnoremap <leader>ps :Rg<SPACE>
-nnoremap <leader>e :CocCommand explorer<CR>
+nnoremap <leader>e :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+nnoremap <leader>a :%w !pbcopy
 nnoremap <silent> <Leader>+ :vertical resize +5<CR>
 nnoremap <silent> <Leader>- :vertical resize -5<CR>
+
+" telescope!!!
+
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" Dashboard
+
+let g:dashboard_default_executive = 'telescope'
+nmap <Leader>ss :<C-u>SessionSave<CR>
+nmap <Leader>sl :<C-u>SessionLoad<CR>
+nnoremap <silent> <Leader>fh :DashboardFindHistory<CR>
+nnoremap <silent> <Leader>ff :DashboardFindFile<CR>
+nnoremap <silent> <Leader>tc :DashboardChangeColorscheme<CR>
+nnoremap <silent> <Leader>fa :DashboardFindWord<CR>
+nnoremap <silent> <Leader>fb :DashboardJumpMark<CR>
+nnoremap <silent> <Leader>cn :DashboardNewFile<CR>
